@@ -1,29 +1,4 @@
 app.modules.init = ((self) => {
-
-  function _getMenuItemsData() {
-    _api({url: 'api/menu-items'}).then((response) => app.config.mainMenu = response);
-  }
-
-  function _getWindowStillData() {
-    _api({url: 'api/window-sills'}).then((response) => app.config.windowSill = response);
-  }
-
-  function _getWindowLedgeData() {
-    _api({url: 'api/window-ledges'}).then((response) => app.config.windowLedge = response);
-  }
-
-  function _getWindowRevealData() {
-    _api({url: 'api/window-reveals'}).then((response) => app.config.windowReveal = response);
-  }
-
-  function _getWindowsData() {
-    _api({url: 'api/windows'}).then((response) => app.config.windows = response);
-  }
-
-  function _getServicesData() {
-    _api({url: 'api/services'}).then((response) => app.config.services = response);
-  }
-
   function _api(data) {
     return $.ajax({
       url: data.url,
@@ -40,19 +15,32 @@ app.modules.init = ((self) => {
   }
 
   function _init() {
-    _getMenuItemsData();
-    _getWindowStillData();
-    _getWindowLedgeData();
-    _getWindowRevealData();
-    _getWindowsData();
-    _getServicesData();
-
     _handlebarsExampleOfUsage(); // Метод, показываеющий как работать с handlebars-loader
   }
 
-  self.ready = () => {
+  function _resolveData() {
+    return $.when(
+      _api({url: 'api/menu-items'}),
+      _api({url: 'api/window-sills'}),
+      _api({url: 'api/window-ledges'}),
+      _api({url: 'api/window-reveals'}),
+      _api({url: 'api/windows'}),
+      _api({url: 'api/services'})
+    ).done((menuItems, windowSills, windowLedges, windowReveals, windows, services) => {
+      app.config.mainMenu = menuItems[0];
+      app.config.windowSill = windowSills[0];
+      app.config.windowLedge = windowLedges[0];
+      app.config.windowReveal = windowReveals[0];
+      app.config.windows = windows[0];
+      app.config.services = services[0];
+    });
+  }
+
+  self.load = () => {
     _init();
   };
+
+  self.resolve = _resolveData;
 
   return self;
 })(app.modules.init || {});

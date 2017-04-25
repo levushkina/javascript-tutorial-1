@@ -1,0 +1,19 @@
+<h3>Дополнительные опции</h3>
+{{#each items}}
+<div class="feature-item">
+  <div class="title">
+    <label>
+      <input class="js-checkbox" type="checkbox"  data-slug="{{this.slug}}">
+      {{this.name}}
+    </label>
+  </div>
+  <div class="selection">
+    <select class="js-select" data-slug="{{this.slug}}">
+      {{#each this.data}}
+      <option value="{{this.price}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div class="price"><span class="js-price">{{this.price}}</span> руб .</div>
+</div>
+{{/each}}

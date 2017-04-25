@@ -1,0 +1,9 @@
+{{#each items}}
+<div data-index="{{@key}}">
+  {{this.totalPrice}}
+  <div class="js-delete-window">удалить</div>
+  <div class="js-edit-window">редактировать</div>
+</div>
+{{/each}}
+
+<div class="js-add-window" data-index="{{items.length}}">Выбрать еще одно окно</div>
